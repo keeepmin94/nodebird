@@ -5,13 +5,17 @@ const path = require("path");
 const session = require("express-session");
 const nunjucks = require("nunjucks"); //추후 리엑트로 변경
 const dotenv = require("dotenv");
+const passport = require("passport");
 //process.env.COOKIE_SECRET 없음
 dotenv.config();
 //process.env.COOKIE_SECRET 있음
 const pageRouter = require("./routes/page");
+const authRouter = require("./routes/auth");
+const passportConfig = require("./passport");
 const { sequelize } = require("./models");
 
 const app = express(); //공식문서 가서 읽고 사용
+passportConfig();
 app.set("port", process.env.PORT || 8001);
 app.set("view engine", "html");
 nunjucks.configure("views", {
@@ -46,7 +50,12 @@ app.use(
   })
 );
 
+// passport미들웨어는 반드시 session 미들웨어 밑에 붙이기
+app.use(passport.initialize()); //req.user, req.login, req.isAuthenticate, req.logout 여기서 얘네들이 생김
+app.use(passport.session()); //connect.sid라는 이름으로 세션 쿠키가 브라우저 전송
+
 app.use("/", pageRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => {
   //404 전용(없는 라우터)
