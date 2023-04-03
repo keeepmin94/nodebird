@@ -9,7 +9,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 //process.env.COOKIE_SECRET 있음
 const pageRouter = require("./routes/page");
-const { format } = require("path");
+const { sequelize } = require("./models");
 
 const app = express(); //공식문서 가서 읽고 사용
 app.set("port", process.env.PORT || 8001);
@@ -18,6 +18,15 @@ nunjucks.configure("views", {
   express: app,
   watch: true,
 });
+
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("데이터베이스 연결 성공");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 app.use(morgan("dev")); //로그용
 app.use(express.static(path.join(__dirname, "public"))); //front에서 자유롭게 public파일에 접근할수있게
