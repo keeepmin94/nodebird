@@ -47,7 +47,7 @@ exports.login = (req, res, next) => {
       }
       return res.redirect("/");
     });
-  })(req, res, next);
+  })(req, res, next); //미들웨어 확장 패턴 (미들웨어 안에서 req, res, next를 사용하고 싶을 때 사용)
 };
 
 exports.logout = (req, res, next) => {

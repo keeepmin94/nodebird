@@ -16,9 +16,10 @@ router.post("/login", isNotLoggedIn, login);
 router.get("/logout", isLoggedIn, logout);
 
 // GET /auth/kakao
-router.get("/kakao", passport.authenticate("kakao"));
+router.get("/kakao", passport.authenticate("kakao")); //카카오톡 로그인 화면으로 redirect
 
 // GET /auth/kakao/callback
+// 카카오 로그인하면 카카오가 여기로 redirect
 router.get(
   "/kakao/callback",
   passport.authenticate("kakao", {

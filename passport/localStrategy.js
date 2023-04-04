@@ -10,7 +10,7 @@ module.exports = () => {
       {
         usernameField: "email", // req.body.email
         passwordField: "password", // req.body.password
-        passReqToCallback: false,
+        passReqToCallback: false, // 이 옵션을 true로 설정하면 아래 콜백 함수의 첫번째 파라미터로 req 객체 전달됨
       },
       async (email, password, done) => {
         // done(서버실패, 성공유저, 로직실패)
