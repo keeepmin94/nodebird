@@ -1,4 +1,4 @@
-const { User, Post } = require("../models");
+const { User, Post, Hashtag } = require("../models");
 
 exports.renderProfile = (req, res, next) => {
   //서비스를 호출
@@ -26,4 +26,25 @@ exports.renderMain = async (req, res, next) => {
   }
 };
 
+exports.renderHashtag = async (req, res, next) => {
+  const query = req.query.hashtag;
+  if (!query) {
+    return res.redirect("/");
+  }
+  try {
+    const hashtag = await Hashtag.findOne({ where: { title: query } });
+    let posts = [];
+    if (hashtag) {
+      posts = await hashtag.getPosts({ include: [{ model: User }] });
+    }
+
+    return res.render("main", {
+      title: `${query} | NodeBird`,
+      twits: posts,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+};
 //라우터 ->컨트롤러 ->서비스(요청, 응답을 모름)
