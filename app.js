@@ -11,6 +11,7 @@ dotenv.config();
 //process.env.COOKIE_SECRET 있음
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
+const postRouter = require("./routes/post");
 const passportConfig = require("./passport");
 const { sequelize } = require("./models");
 
@@ -34,6 +35,7 @@ sequelize
 
 app.use(morgan("dev")); //로그용
 app.use(express.static(path.join(__dirname, "public"))); //front에서 자유롭게 public파일에 접근할수있게
+app.use("/img", express.static(path.join(__dirname, "uploads"))); //front에서 upload파일 접근
 app.use(express.json()); //bodyParser json
 app.use(express.urlencoded({ extended: false })); //bodyParser form
 app.use(cookieParser(process.env.COOKIE_SECRET)); //cookieParser
@@ -56,6 +58,7 @@ app.use(passport.session()); //connect.sid라는 이름으로 세션 쿠키가 �
 
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
+app.use("/post", postRouter);
 
 app.use((req, res, next) => {
   //404 전용(없는 라우터)

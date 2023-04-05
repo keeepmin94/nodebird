@@ -21,7 +21,7 @@ module.exports = () => {
               snsId: profile.id,
               provider: "kakao",
             });
-
+            
             done(null, newUser);
           }
         } catch (error) {
